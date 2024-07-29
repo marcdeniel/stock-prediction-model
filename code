@@ -84,10 +84,29 @@ feature_importances.sort_values('importance', ascending = False)
 future_dates = pd.date_range(start=stock_data.index[-1]
 peroids = 11, inclusive = 'right')
 future_data = pd.DataFrame(index=future_dates, columns=features.columns)
-last_known_values
+last_known_values = stock_data.iloc[-1]
 
+for i in range(len(future_data)):
+    for col in features.columns:
+        if col == '4. close':
+            future_data.iloc[i][col] = last_known_values[col] * (1 + np.random.normal(0, 0.01))
+        else:
+            future_data.iloc[i][col] = last_known_values[col]
 
-  
+future_data = future_data.ffill().bfill()
+future_data_scaled = scaler.transform(future_data)
+future_predictions = best_model.predict(future_data_scaled)
 
+future_dates = future_dates[:len(future_predictions)]
 
+future_pred_df = pd.DataFrame(future_predictions, index=future_dates, columns=['Predicted Price'])
+print(future_pred_df)
+
+#plot
+plt.figure(figsize=(14, 7))
+plt.plot(stock_data.index, stock_data['4. close'], label='Historical Prices')
+plt.plot(future_pred_df.index, future_pred_df['Predicted Price'], label='Future Predictions', linestyle='--')
+plt.title('Historical Prices and Future Predictions')
+plt.legend()
+plt.show()
 
