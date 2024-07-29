@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as pd
-from alpha_vantage.timeseries import TimeSeries
+from alpha_vantage.timeseries import TimeSeries #fetch stock data
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.esemble import RandomForestRegressor, GradientBooting Regressor
@@ -19,14 +19,14 @@ stock_data = stock_data.sort_index()
 stock_data.index = pd.to_datetime(stock_data.index)
 
 #FE
-stock_data['SMA_50'] = stock_data['4.close].rolling(windoww=50).mean()
+stock_data['SMA_50'] = stock_data['4.close].rolling(windoww=50).mean() #50 day closing price MA.
 stock_data['SMA_200'] = stock_data['4.close'].rolling(window=200).mean()
 stock_data['EMA_20'] = stock_data['4. close'].ewm(span=20,adjust=False.mean()
 stock_data['Volatility'] = stock_data['4.close'].rolling(window=20).std()
 stock_data['RSI'] = stock_data['4.close'].diff().lamba x:max(x,0)).rolling(window=14).mean()
 /stock_data['4.close'].diff().abs().rolling(window=14).mean() * 100
 stock_data['Momentum'] = stock_data['4.close'].diff(4)
-stock_data['Log Returns'] = np.log(stock_data['4. close']
+stock_data['Log Returns'] = np.log(stock_data['4. close'] #logarithim return of stock price.
 /stock_data['4. close'].shift(1))
 stock_data['4. close'].shift(1))
 stock_data = stock_data.ffill().bfill()
